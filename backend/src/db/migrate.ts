@@ -9,7 +9,7 @@ export async function runMigrations() {
       id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
       title VARCHAR(500) NOT NULL,
       description TEXT DEFAULT '',
-      column VARCHAR(20) NOT NULL CHECK (column IN ('todo', 'in_progress', 'done')),
+      "column" VARCHAR(20) NOT NULL CHECK ("column" IN ('todo', 'in_progress', 'done')),
       position VARCHAR(50) NOT NULL,
       version INTEGER NOT NULL DEFAULT 1,
       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
@@ -20,7 +20,7 @@ export async function runMigrations() {
   // Create index for efficient column + position queries
   await query(`
     CREATE INDEX IF NOT EXISTS idx_tasks_column_position
-    ON tasks (column, position)
+    ON tasks ("column", position)
   `);
 
   // Create index for efficient lookups by id

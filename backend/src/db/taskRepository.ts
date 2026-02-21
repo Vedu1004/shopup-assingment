@@ -29,14 +29,14 @@ function rowToTask(row: TaskRow): Task {
 
 export async function getAllTasks(): Promise<Task[]> {
   const result = await query<TaskRow>(
-    'SELECT * FROM tasks ORDER BY column, position'
+    'SELECT * FROM tasks ORDER BY "column", position'
   );
   return result.rows.map(rowToTask);
 }
 
 export async function getTasksByColumn(column: Column): Promise<Task[]> {
   const result = await query<TaskRow>(
-    'SELECT * FROM tasks WHERE column = $1 ORDER BY position',
+    'SELECT * FROM tasks WHERE "column" = $1 ORDER BY position',
     [column]
   );
   return result.rows.map(rowToTask);
@@ -54,7 +54,7 @@ export async function createTask(input: CreateTaskInput): Promise<Task> {
   return transaction(async (client) => {
     // Get the last position in the target column
     const lastTask = await client.query<TaskRow>(
-      'SELECT position FROM tasks WHERE column = $1 ORDER BY position DESC LIMIT 1',
+      'SELECT position FROM tasks WHERE "column" = $1 ORDER BY position DESC LIMIT 1',
       [input.column]
     );
 
@@ -64,7 +64,7 @@ export async function createTask(input: CreateTaskInput): Promise<Task> {
 
     const id = uuidv4();
     const result = await client.query<TaskRow>(
-      `INSERT INTO tasks (id, title, description, column, position, version)
+      `INSERT INTO tasks (id, title, description, "column", position, version)
        VALUES ($1, $2, $3, $4, $5, 1)
        RETURNING *`,
       [id, input.title, input.description || '', input.column || 'todo', position]
@@ -166,7 +166,7 @@ export async function moveTask(input: MoveTaskInput): Promise<MoveResult> {
     // Update position and column
     const result = await client.query<TaskRow>(
       `UPDATE tasks
-       SET column = $1, position = $2, version = version + 1
+       SET "column" = $1, position = $2, version = version + 1
        WHERE id = $3
        RETURNING *`,
       [input.column, input.position, input.id]
@@ -205,7 +205,7 @@ export async function getReorderPositions(
   targetIndex: number
 ): Promise<{ before?: string; after?: string }> {
   const result = await query<{ position: string }>(
-    'SELECT position FROM tasks WHERE column = $1 ORDER BY position',
+    'SELECT position FROM tasks WHERE "column" = $1 ORDER BY position',
     [column]
   );
 
