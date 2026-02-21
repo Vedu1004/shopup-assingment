@@ -82,7 +82,13 @@ export function useWebSocket() {
         const { messageId, task } = message.payload as { messageId: string; task?: Task };
         resolvePendingOperation(messageId);
         if (task) {
-          updateTask(task);
+          // Check if task exists - if not, add it (for newly created tasks)
+          const existingTask = useTaskStore.getState().getTaskById(task.id);
+          if (existingTask) {
+            updateTask(task);
+          } else {
+            addTask(task);
+          }
         }
         break;
       }
