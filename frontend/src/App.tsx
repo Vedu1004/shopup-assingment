@@ -23,19 +23,22 @@ function App() {
                   Real-time collaboration with conflict resolution
                 </p>
               </div>
-              {currentUser && (
-                <div className="flex items-center gap-2">
-                  <div
-                    className="user-avatar"
-                    style={{ backgroundColor: currentUser.color }}
-                  >
-                    {currentUser.name.charAt(0)}
+              <div className="flex items-center gap-4">
+                <UserPresence />
+                {currentUser && (
+                  <div className="flex items-center gap-2 pl-4 border-l border-gray-200">
+                    <div
+                      className="user-avatar"
+                      style={{ backgroundColor: currentUser.color }}
+                    >
+                      {currentUser.name.charAt(0)}
+                    </div>
+                    <span className="text-sm text-gray-600">
+                      {currentUser.name}
+                    </span>
                   </div>
-                  <span className="text-sm text-gray-600">
-                    {currentUser.name}
-                  </span>
-                </div>
-              )}
+                )}
+              </div>
             </div>
           </div>
         </header>
@@ -47,7 +50,6 @@ function App() {
 
         {/* Status indicators */}
         <ConnectionStatus />
-        <UserPresence />
         <ConflictToast />
       </div>
     </ErrorBoundary>

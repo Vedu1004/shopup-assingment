@@ -10,7 +10,7 @@ export function UserPresence() {
   }
 
   return (
-    <div className="fixed top-4 left-4 flex items-center gap-2">
+    <div className="flex items-center gap-2">
       <span className="text-sm text-gray-500">Online:</span>
       <div className="flex -space-x-2">
         {otherUsers.slice(0, 5).map((user) => (
