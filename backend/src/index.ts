@@ -5,6 +5,7 @@ import { WebSocketServer } from 'ws';
 import dotenv from 'dotenv';
 import { createWebSocketHandler } from './handlers/wsHandler.js';
 import * as taskService from './services/taskService.js';
+import { runMigrations } from './db/migrate.js';
 
 dotenv.config();
 
@@ -75,9 +76,16 @@ process.on('SIGINT', () => {
   });
 });
 
-// Start server
-server.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-  console.log(`WebSocket endpoint: ws://localhost:${PORT}/ws`);
-  console.log(`REST API: http://localhost:${PORT}/api`);
-});
+// Run migrations and start server
+runMigrations()
+  .then(() => {
+    server.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+      console.log(`WebSocket endpoint: ws://localhost:${PORT}/ws`);
+      console.log(`REST API: http://localhost:${PORT}/api`);
+    });
+  })
+  .catch((err) => {
+    console.error('Failed to run migrations:', err);
+    process.exit(1);
+  });

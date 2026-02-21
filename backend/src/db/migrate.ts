@@ -1,6 +1,6 @@
 import { query } from './connection.js';
 
-async function migrate() {
+export async function runMigrations() {
   console.log('Running migrations...');
 
   // Create tasks table
@@ -53,10 +53,14 @@ async function migrate() {
   `);
 
   console.log('Migrations completed successfully!');
-  process.exit(0);
 }
 
-migrate().catch((err) => {
-  console.error('Migration failed:', err);
-  process.exit(1);
-});
+// Run directly if executed as script
+if (process.argv[1]?.includes('migrate')) {
+  runMigrations()
+    .then(() => process.exit(0))
+    .catch((err) => {
+      console.error('Migration failed:', err);
+      process.exit(1);
+    });
+}
