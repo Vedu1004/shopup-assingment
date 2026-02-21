@@ -84,7 +84,7 @@ npm run dev:frontend # Frontend on port 5173
 │   │   ├── hooks/           # Custom hooks (WebSocket)
 │   │   ├── store/           # Zustand store
 │   │   └── types/           # TypeScript types
-│   └── Dockerfile
+│   └── package.json
 ├── docker-compose.yml
 ├── DESIGN.md               # Architecture and design decisions
 └── README.md
@@ -133,10 +133,13 @@ npm run test:backend
 
 ### Live Demo
 
-**Frontend**: [https://your-app.vercel.app](https://your-app.vercel.app)
-**Backend**: [https://your-backend.railway.app](https://your-backend.railway.app)
+**Frontend**: [https://shopup-assingment-production.up.railway.app](https://shopup-assingment-production.up.railway.app)
 
-> Note: Free tier deployments may have cold starts of 10-30 seconds after inactivity.
+**Backend API**: [https://humble-curiosity-production-0e3d.up.railway.app](https://humble-curiosity-production-0e3d.up.railway.app)
+
+**Health Check**: [https://humble-curiosity-production-0e3d.up.railway.app/health](https://humble-curiosity-production-0e3d.up.railway.app/health)
+
+> **Note**: Free tier deployments may have cold starts of 10-30 seconds after inactivity. If the app appears unresponsive, please wait a moment for the services to wake up.
 
 ### Deploy to Railway
 
@@ -203,8 +206,11 @@ See [DESIGN.md](./DESIGN.md) for detailed documentation of:
 
 [Link to 2-3 minute screen recording demonstrating:]
 - Two browser tabs making simultaneous edits
-- Network disconnect and reconnect scenario
-- Final consistent state
+- Conflict resolution when both users move the same task
+- Network disconnect and reconnect scenario (Chrome DevTools → Network → Offline)
+- Final consistent state across all clients
+
+> Video link: *[Add your video link here]*
 
 ## License
 
