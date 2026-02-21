@@ -3,7 +3,21 @@ import { v4 as uuidv4 } from 'uuid';
 import { useTaskStore } from '../store/taskStore';
 import { Task, Column, WSMessage, SyncState } from '../types';
 
-const WS_URL = import.meta.env.VITE_WS_URL || `ws://${window.location.hostname}:3001/ws`;
+const getWebSocketURL = () => {
+  if (import.meta.env.VITE_WS_URL) {
+    return import.meta.env.VITE_WS_URL;
+  }
+  // Auto-detect protocol based on page protocol
+  const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+  if (import.meta.env.VITE_API_URL) {
+    const host = new URL(import.meta.env.VITE_API_URL).host;
+    return `${protocol}//${host}/ws`;
+  }
+  // Local development fallback
+  return `${protocol}//${window.location.hostname}:${window.location.port || '3001'}/ws`;
+};
+
+const WS_URL = getWebSocketURL();
 const RECONNECT_DELAY = 1000;
 const MAX_RECONNECT_DELAY = 30000;
 
